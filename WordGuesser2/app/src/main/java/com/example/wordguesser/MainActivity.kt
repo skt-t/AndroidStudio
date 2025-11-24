@@ -7,18 +7,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-// Imports MUY importantes para la navegación
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-// Imports de tus pantallas
 import com.example.wordguesser.ui.theme.WordGuesserTheme
+import com.example.wordguesser.ui.theme.navigation.Screen
 import com.example.wordguesser.ui.theme.screens.GameScreen
+import com.example.wordguesser.ui.theme.screens.LoginScreen
 import com.example.wordguesser.ui.theme.screens.MenuScreen
+import com.example.wordguesser.ui.theme.screens.OptionsScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Obtenemos las preferencias para pasarlas a la pantalla de Opciones
+        val prefs = getSharedPreferences("game_prefs", MODE_PRIVATE)
+
         setContent {
             WordGuesserTheme {
                 Surface(
@@ -28,25 +33,40 @@ class MainActivity : ComponentActivity() {
                     // 1. Creamos el controlador de navegación
                     val navController = rememberNavController()
 
-                    // 2. NavHost es el "contenedor" que cambiará las pantallas
+                    // 2. Configuramos el NavHost usando las rutas seguras de Screen.kt
+                    // IMPORTANTE: Cambiamos el inicio a Login
                     NavHost(
                         navController = navController,
-                        startDestination = "menu" // Le decimos que empiece en el menú
+                        startDestination = Screen.Login.route
                     ) {
 
-                        // Ruta para la pantalla "menu"
-                        composable("menu") {
+                        // --- PANTALLA DE LOGIN ---
+                        composable(Screen.Login.route) {
+                            LoginScreen(navController = navController)
+                        }
+
+                        // --- PANTALLA DE MENÚ ---
+                        composable(Screen.Menu.route) {
                             MenuScreen(
                                 onJugarClicked = {
-                                    // Cuando se haga clic, navegar a "game"
-                                    navController.navigate("game")
+                                    navController.navigate(Screen.Game.route)
                                 }
+                                // Si en el futuro agregas un botón de opciones al menú:
+                                // onOpcionesClicked = { navController.navigate(Screen.Options.route) }
                             )
                         }
 
-                        // Ruta para la pantalla "game"
-                        composable("game") {
-                            GameScreen() // El ViewModel se crea automáticamente
+                        // --- PANTALLA DE JUEGO ---
+                        composable(Screen.Game.route) {
+                            GameScreen()
+                        }
+
+                        // --- PANTALLA DE OPCIONES ---
+                        composable(Screen.Options.route) {
+                            OptionsScreen(prefs = prefs) { isMusicOn ->
+                                // Aquí puedes manejar lógica global si la música cambia,
+                                // aunque tu MenuScreen ya observa el ciclo de vida.
+                            }
                         }
                     }
                 }

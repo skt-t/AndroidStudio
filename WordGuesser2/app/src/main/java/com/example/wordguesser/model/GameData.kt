@@ -1,4 +1,4 @@
-package com.example.wordguesser
+package com.example.wordguesser.model
 
 // ¡Importante! Asegúrate de que este import SÍ aparezca
 // y no esté en gris después de un "Rebuild"

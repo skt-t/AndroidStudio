@@ -1,9 +1,12 @@
-package com.example.wordguesser.model
+package com.example.wordguesser.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.wordguesser.model.Desafio
+import com.example.wordguesser.model.listaDeDesafios
+
 // ¡Estos imports deberían funcionar ahora!
 
 data class GameUiState(
