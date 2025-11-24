@@ -16,6 +16,7 @@ import com.example.wordguesser.ui.theme.screens.GameScreen
 import com.example.wordguesser.ui.theme.screens.LoginScreen
 import com.example.wordguesser.ui.theme.screens.MenuScreen
 import com.example.wordguesser.ui.theme.screens.OptionsScreen
+import com.example.wordguesser.ui.theme.screens.RegisterScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +44,10 @@ class MainActivity : ComponentActivity() {
                         // --- PANTALLA DE LOGIN ---
                         composable(Screen.Login.route) {
                             LoginScreen(navController = navController)
+                        }
+
+                        composable(Screen.Register.route) {
+                            RegisterScreen(navController = navController)
                         }
 
                         // --- PANTALLA DE MENÚ ---
