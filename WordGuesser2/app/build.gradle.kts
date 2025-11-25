@@ -42,6 +42,16 @@ android {
 }
 
 dependencies {
+
+    testImplementation("androidx.compose.runtime:runtime:1.5.4")
+
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("io.mockk:mockk:1.13.8")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+
+    // For testing LiveData and ViewModel
+    testImplementation("app.cash.turbine:turbine:1.0.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation(libs.androidx.core.ktx)

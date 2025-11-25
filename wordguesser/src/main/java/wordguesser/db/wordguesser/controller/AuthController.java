@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,19 +27,25 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User loginUser) {
-        return userRepository.findByUsername(loginUser.getUsername())
-                .map(user -> {
-                    if (user.getPassword().equals(loginUser.getPassword())) {
-                        Map<String, Object> response = new HashMap<>();
-                        response.put("message", "Login exitoso");
-                        response.put("userId", user.getId());
-                        response.put("username", user.getUsername());
-                        return ResponseEntity.ok(response);
-                    } else {
-                        return ResponseEntity.status(401).body(Map.of("message", "Contraseña incorrecta"));
-                    }
-                })
-                .orElse(ResponseEntity.status(404).body(Map.of("message", "Usuario no encontrado")));
+        // Try to find by username first
+        Optional<User> userOpt = userRepository.findByUsername(loginUser.getUsername());
+    
+        // If not found by username, try to find by email
+        if (userOpt.isEmpty() && loginUser.getEmail() != null && !loginUser.getEmail().isEmpty()) {
+            userOpt = userRepository.findByEmail(loginUser.getEmail());
+        }
+    
+        return userOpt.map(user -> {
+            if (user.getPassword().equals(loginUser.getPassword())) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("message", "Login exitoso");
+                response.put("userId", user.getId());
+                response.put("username", user.getUsername());
+                return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.status(401).body(Map.of("message", "Contraseña incorrecta"));
+            }
+        }).orElse(ResponseEntity.status(404).body(Map.of("message", "Usuario no encontrado")));
     }
     
     @GetMapping("/ping")

@@ -23,8 +23,6 @@ import androidx.navigation.NavController
 import com.example.wordguesser.viewmodel.LoginViewModel
 import com.example.wordguesser.ui.theme.navigation.Screen
 
-// import com.example.wordguesser.R
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
@@ -52,15 +50,15 @@ fun LoginScreen(
                 modifier = Modifier.padding(bottom = 32.dp)
             )
 
-            // Campo Email
+            // Campo Usuario/Email (changed from "email" to "username")
             OutlinedTextField(
-                value = viewModel.email,
-                onValueChange = { viewModel.email = it },
-                label = { Text("Correo Electrónico") },
+                value = viewModel.username,
+                onValueChange = { viewModel.username = it },
+                label = { Text("Usuario o Email") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
+                    keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next
                 )
             )
