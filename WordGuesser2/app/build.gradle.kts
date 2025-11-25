@@ -1,14 +1,32 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
 
+// Load keystore properties with better error handling
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties()
+
+val useSigningConfig = if (keystorePropertiesFile.exists()) {
+    try {
+        keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+        true
+    } catch (e: Exception) {
+        println("Error loading keystore.properties: ${e.message}")
+        false
+    }
+} else {
+    println("keystore.properties not found at: ${keystorePropertiesFile.absolutePath}")
+    false
+}
+
 android {
     namespace = "com.example.wordguesser"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.wordguesser"
@@ -20,6 +38,17 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    if (useSigningConfig) {
+        signingConfigs {
+            create("release") {
+                keyAlias = keystoreProperties["keyAlias"] as? String ?: ""
+                keyPassword = keystoreProperties["keyPassword"] as? String ?: ""
+                storeFile = keystoreProperties["storeFile"]?.let { file(it as String) }
+                storePassword = keystoreProperties["storePassword"] as? String ?: ""
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -27,8 +56,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            if (useSigningConfig) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -42,15 +75,11 @@ android {
 }
 
 dependencies {
-
-    testImplementation("androidx.compose.runtime:runtime:1.5.4")
-
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.mockk:mockk:1.13.8")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     testImplementation("androidx.arch.core:core-testing:2.2.0")
-
-    // For testing LiveData and ViewModel
+    testImplementation("androidx.compose.runtime:runtime:1.5.4")
     testImplementation("app.cash.turbine:turbine:1.0.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
