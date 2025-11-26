@@ -42,12 +42,12 @@ La aplicación se conecta a un servidor local (configurado en `RetrofitClient` c
 3.  IntelliJ IDEA (para el backend).
 
 ### Paso 1: Levantar el Backend
-1.  Abrir el proyecto `wordguesser-backend` en IntelliJ IDEA.
+1.  Abrir el proyecto `wordguesser` (back end) en IntelliJ IDEA o VS Code.
 2.  Ejecutar la clase principal `WordguesserApplication.java`.
 3.  Verificar que la consola muestre `Started WordguesserApplication` en el puerto `8080`.
 
 ### Paso 2: Ejecutar la App Android
-1.  Abrir el proyecto `wordguesser` en Android Studio.
+1.  Abrir el proyecto `wordguesser2` en Android Studio.
 2.  Sincronizar el proyecto con Gradle (Sync Project with Gradle Files).
 3.  Seleccionar un dispositivo emulado (Virtual Device) o conectar un dispositivo físico.
     * *Nota: Si usa dispositivo físico, asegúrese de cambiar la IP en `RetrofitClient.kt`.*
