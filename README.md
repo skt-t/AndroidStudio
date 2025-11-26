@@ -34,11 +34,6 @@ La aplicación se conecta a un servidor local (configurado en `RetrofitClient` c
 | `POST` | `/api/auth/register` | Recibe un objeto JSON con `nombre`, `email` y `password` para crear un usuario. |
 | `POST` | `/api/auth/login` | Recibe credenciales y valida el acceso del usuario. |
 
-### 2. API Externa (Requisito Evaluación)
-*[NOTA: Si implementaste una API externa para traer palabras random, descríbela aquí. Si usas solo datos locales, borra esta sección o indica que usas datos locales por ahora].*
-* **URL:** `[URL_DE_TU_API_EXTERNA]`
-* **Función:** Obtener palabras aleatorias para el juego.
-
 ## 🛠️ Pasos para Ejecutar el Proyecto
 
 ### Requisitos Previos
