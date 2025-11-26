@@ -1,44 +1,73 @@
-# AndroidStudio
-## ¡¡ATENCION!! - EL ARCHIVO REQUERIDO ES "WordGuesser2", POR FAVOR IGNORAR OTROS ARCHIVOS A MENOS QUE QUIERA PROBAR UNA VERSION TEMPRANA DEL JUEGO
-# Word Guesser - Proyect
+# 📱 WordGuesser - Aplicación Móvil Android
 
-Este es un juego para Android, desarrollado en Kotlin y Jetpack Compose, como proyecto para el curso de desarrollo de aplicaciones moviles. El juego consiste en adivinar una palabra secreta basándose en una imagen y una pista de texto, utilizando reconocimiento de voz para recibir la respuesta.
+Este proyecto consiste en una aplicación móvil de adivinanzas desarrollada en **Kotlin** utilizando **Jetpack Compose**. La aplicación implementa una arquitectura **MVVM** (Model-View-ViewModel) y se conecta a un microservicio propio desarrollado en **Spring Boot** para la autenticación de usuarios y persistencia de datos.
 
-## Integrantes
+## 👥 Integrantes
+* **Cory Leveke**
+* **Allan Nuñez**
+* **Asignatura:** Desarrollo de Aplicaciones Móviles (DSY1105)
+* **Sección:** 003D
 
-* Allan Nuñez
-* Cory Leveke
+## 🚀 Funcionalidades
 
----
+### Módulo de Autenticación (Backend Integration)
+* **Registro de Usuarios:** Permite crear una nueva cuenta. Los datos se envían al backend y se almacenan en una base de datos H2 en memoria.
+* **Inicio de Sesión (Login):** Autenticación de usuarios mediante credenciales (usuario/email y contraseña). Valida la existencia del usuario en la base de datos.
 
-## Funcionalidades Implementadas
+### Módulo de Juego
+* **Dinámica de Adivinanza:** El usuario debe adivinar una palabra secreta basándose en una pista de texto y una imagen referencial.
+* **Sistema de Rondas:** Al acertar o fallar, se puede pasar a la siguiente palabra.
+* **Retroalimentación Visual:** Mensajes de éxito o error al intentar adivinar.
 
-El proyecto cuenta con las siguientes características:
+### Características Técnicas
+* **Persistencia de Datos:** Uso de base de datos H2 a través de una API REST propia.
+* **Comunicación de Red:** Implementación de **Retrofit** para el consumo de servicios web.
+* **Testing:** Pruebas unitarias implementadas con JUnit para validar la lógica de los ViewModels (`GameViewModel` y `LoginViewModel`).
 
-Logica del juego: El juego consiste en completar una palabra "misteriosa" que aparece en pantalla, se cuenta con una imagen y la palabra semi completa como guia para resolver.
-el usuario cuenta con un boton que dice "HABLAR" para poder hacer su "guess" si acierta sale un mensaje de logro, y si no, de derrota (aunque no se puede perder).
-si el usuario lo desea puede pasar a la siguiente palabra para adivinar con el boton "SIGUIENTE PALABRA".
+## 🔗 Endpoints Utilizados
 
-Interfaz de Usuario: El usuario cuenta con una interfaz muy simple, un menu con musica de fondo para ambientar y un boton que dice "JUGAR", cuando el usuario juega se puede ver una transisión al juego principal
-para volver al menu simplemente se usa el boton de devolver del telefono movil.
+### 1. Microservicio Propio (Spring Boot)
+La aplicación se conecta a un servidor local (configurado en `RetrofitClient` como `10.0.2.2` para el emulador o la IP local para dispositivos físicos).
 
-Funcionalidades usadas del telefono:
-Reconocimiento de Voz (Android SDK):
-   - Implementación del `RecognizerIntent` de Android para capturar la voz del usuario.
-   - Manejo de permisos en tiempo de ejecución para el `Manifest.permission.RECORD_AUDIO`.
-   - Procesamiento del resultado de voz para compararlo con la palabra secreta.
+| Método | Endpoint | Descripción |
+| :--- | :--- | :--- |
+| `POST` | `/api/auth/register` | Recibe un objeto JSON con `nombre`, `email` y `password` para crear un usuario. |
+| `POST` | `/api/auth/login` | Recibe credenciales y valida el acceso del usuario. |
 
-Multimedia (MediaPlayer):
-   - Música de fondo en la pantalla de menú que se gestiona automáticamente con el ciclo de vida de la app (`LifecycleEventObserver`).
-   - La música se pausa al minimizar la app y se detiene y libera (`release`) al navegar a la pantalla de juego para optimizar recursos.
+### 2. API Externa (Requisito Evaluación)
+*[NOTA: Si implementaste una API externa para traer palabras random, descríbela aquí. Si usas solo datos locales, borra esta sección o indica que usas datos locales por ahora].*
+* **URL:** `[URL_DE_TU_API_EXTERNA]`
+* **Función:** Obtener palabras aleatorias para el juego.
 
----
+## 🛠️ Pasos para Ejecutar el Proyecto
 
-## Pasos para Ejecutar
+### Requisitos Previos
+1.  Android Studio Koala o superior.
+2.  JDK 17 o 21.
+3.  IntelliJ IDEA (para el backend).
 
-Para poder jugar el juego necesitamos tener android studio.
+### Paso 1: Levantar el Backend
+1.  Abrir el proyecto `wordguesser-backend` en IntelliJ IDEA.
+2.  Ejecutar la clase principal `WordguesserApplication.java`.
+3.  Verificar que la consola muestre `Started WordguesserApplication` en el puerto `8080`.
 
-1. primero hacemos un clon de este repositorio para traer los archivos necesarios del juego, los archivos requeridos son WordGuesser2
-2. en android studio abrimos conectamos nuestro celular en modo desarrollador
-3. ejecutamos la app
-4. ¡¡YA PUEDES JUGAR!!
+### Paso 2: Ejecutar la App Android
+1.  Abrir el proyecto `wordguesser` en Android Studio.
+2.  Sincronizar el proyecto con Gradle (Sync Project with Gradle Files).
+3.  Seleccionar un dispositivo emulado (Virtual Device) o conectar un dispositivo físico.
+    * *Nota: Si usa dispositivo físico, asegúrese de cambiar la IP en `RetrofitClient.kt`.*
+4.  Presionar el botón **Run** (▶).
+
+## 🧪 Pruebas Unitarias
+El proyecto incluye pruebas para validar la lógica de negocio. Para ejecutarlas:
+1.  Hacer clic derecho en la carpeta `com.example.wordguesser (test)`.
+2.  Seleccionar "Run Tests in 'wordguesser'".
+3.  **Cobertura:** Se validan los estados de éxito/error del Login y la lógica de aciertos del juego.
+
+## 📦 Evidencia de Entrega (APK Firmado)
+
+### Captura del APK generado y Keystore (.jks)
+*![alt text](CreacionFirma.png)*
+*![alt text](FirmaApp.png)*
+
+> El archivo `.jks` y el APK firmado se encuentran en la raíz del repositorio / carpeta de entrega.
